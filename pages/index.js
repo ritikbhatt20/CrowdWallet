@@ -1,5 +1,3 @@
-import Header from "@/components/Header";
-
 import { useMemo } from "react";  //react hook
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
@@ -7,6 +5,12 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adap
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
+import Header from "@/components/Header";
+import ProjectForm from "@/components/ProjectForm";
+import ContributionForm from "@/components/ContributionForm";
+import ProjectDetails from "@/components/ProjectDetails";
+import ClaimFundsButton from "@/components/ClaimFundsButton";
+import Footer from "@/components/Footer";
 import style from "../styles/Home.module.css";
 
 export default function Home() {
@@ -24,9 +28,14 @@ export default function Home() {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>
-            <div className={style.wrapper}>
-              <Header />
-             </div>
+          <Header />
+            <div className={style.container}>
+              <ProjectForm />
+              <ProjectDetails project={{ fundingGoal: 10000, deadline: "2024-12-31", totalFunded: 5000, claimedFund: false }} />
+              <ContributionForm />
+              <ClaimFundsButton onClick={() => console.log("Funds claimed!")} />
+            </div>
+          <Footer />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
