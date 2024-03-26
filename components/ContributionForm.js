@@ -1,25 +1,28 @@
-// components/ContributionForm.js
-import { useState } from "react";
+// import { useState } from 'react';
+// import { useAppContext } from '../context';
 
-const ContributionForm = () => {
-  const [amount, setAmount] = useState(0);
+// const ContributionForm = () => {
+//   const { contribute } = useAppContext();
+//   const [amount, setAmount] = useState(0);
 
-  const handleContribute = (e) => {
-    e.preventDefault();
-    // Logic to contribute funds to project
-  };
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     // Call the contribute function from the context
+//     contribute(amount);
+//   };
 
-  return (
-    <form onSubmit={handleContribute}>
-      <input
-        type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="Enter amount to contribute"
-      />
-      <button type="submit">Contribute</button>
-    </form>
-  );
-};
+//   return (
+//     <div>
+//       <h2>Contribute Funds</h2>
+//       <form onSubmit={handleSubmit}>
+//         <div>
+//           <label>Amount:</label>
+//           <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+//         </div>
+//         <button type="submit">Contribute</button>
+//       </form>
+//     </div>
+//   );
+// };
 
-export default ContributionForm;
+// export default ContributionForm;

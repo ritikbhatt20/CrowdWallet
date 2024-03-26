@@ -1,31 +1,32 @@
-// components/ProjectForm.js
-import { useState } from "react";
+import { useState } from 'react';
+import { useAppContext } from '../context';
 
 const ProjectForm = () => {
+  const { initializeProject } = useAppContext();
   const [fundingGoal, setFundingGoal] = useState(0);
-  const [deadline, setDeadline] = useState("");
+  const [deadline, setDeadline] = useState('');
 
-  const handleFormSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic to submit project details to smart contract
+    // Call the initializeProject function from the context
+    initializeProject(fundingGoal, new Date(deadline).getTime());
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <input
-        type="number"
-        value={fundingGoal}
-        onChange={(e) => setFundingGoal(e.target.value)}
-        placeholder="Enter funding goal"
-      />
-      <input
-        type="date"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-        placeholder="Enter deadline"
-      />
-      <button type="submit">Create Project</button>
-    </form>
+    <div>
+      <h2>Create a New Project</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Funding Goal:</label>
+          <input type="number" value={fundingGoal} onChange={(e) => setFundingGoal(e.target.value)} />
+        </div>
+        <div>
+          <label>Deadline:</label>
+          <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+        </div>
+        <button type="submit">Initialize Project</button>
+      </form>
+    </div>
   );
 };
 
