@@ -12,6 +12,7 @@ import ProjectDetails from "@/components/ProjectDetails";
 import ClaimFundsButton from "@/components/ClaimFundsButton";
 import Footer from "@/components/Footer";
 import style from "../styles/Home.module.css";
+import { AppProvider } from "@/context/context";
 
 export default function Home() {
   const endpoint = "https://fluent-little-sun.solana-devnet.quiknode.pro/371c43da2c0c0ea39a2d68d940b83d1c7a0a05b5/";
@@ -28,14 +29,14 @@ export default function Home() {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>
-          <Header />
-            <div className={style.container}>
-              <ProjectForm />
-              <ProjectDetails project={{ fundingGoal: 10000, deadline: "2024-12-31", totalFunded: 5000, claimedFund: false }} />
-              <ContributionForm />
-              <ClaimFundsButton onClick={() => console.log("Funds claimed!")} />
-            </div>
-          <Footer />
+          <AppProvider>
+            <Header />
+              <div className={style.container}>
+                <ProjectForm />
+                <ProjectDetails/>
+              </div>
+            <Footer />
+          </AppProvider>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

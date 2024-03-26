@@ -1,15 +1,20 @@
-import { useState } from 'react';
-import { useAppContext } from '../context';
+import { useState } from "react";
+import { useAppContext } from "@/context/context";
 
 const ProjectForm = () => {
   const { initializeProject } = useAppContext();
   const [fundingGoal, setFundingGoal] = useState(0);
-  const [deadline, setDeadline] = useState('');
+  const [deadline, setDeadline] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Call the initializeProject function from the context
-    initializeProject(fundingGoal, new Date(deadline).getTime());
+    const deadlineTimestamp = (new Date(deadline).getTime())/1000; // Convert deadline to Unix timestamp
+    let fundGoal = parseInt(fundingGoal)
+    console.log(typeof fundGoal)
+    console.log(typeof deadlineTimestamp)
+    initializeProject(fundGoal, deadlineTimestamp);
+    setFundingGoal(0);
+    setDeadline("");
   };
 
   return (
@@ -17,12 +22,24 @@ const ProjectForm = () => {
       <h2>Create a New Project</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Funding Goal:</label>
-          <input type="number" value={fundingGoal} onChange={(e) => setFundingGoal(e.target.value)} />
+          <label htmlFor="fundingGoal">Funding Goal:</label>
+          <input
+            type="number"
+            id="fundingGoal"
+            value={fundingGoal}
+            onChange={(e) => setFundingGoal(e.target.value)}
+            required
+          />
         </div>
         <div>
-          <label>Deadline:</label>
-          <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
+          <label htmlFor="deadline">Deadline:</label>
+          <input
+            type="date"
+            id="deadline"
+            value={deadline}
+            onChange={(e) => setDeadline(e.target.value)}
+            required
+          />
         </div>
         <button type="submit">Initialize Project</button>
       </form>

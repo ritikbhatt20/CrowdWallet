@@ -1,27 +1,24 @@
-// import { useState, useEffect } from 'react';
-// import { useAppContext } from '../context';
+import { useAppContext } from "../context/context";
+import ProjectRow from "./ProjectRow";
 
-// const ProjectDetails = () => {
-//   const { projectData } = useAppContext();
-//   const [project, setProject] = useState(null);
+const ProjectDetails = () => {
+  const { projectHistory } = useAppContext();
 
-//   useEffect(() => {
-//     // Update project data when context changes
-//     setProject(projectData);
-//   }, [projectData]);
+  return (
+    <div>
+      <div>
+        <div>Funding Goal</div>
+        <div>Deadline</div>
+        <div>Total Funded</div>
+        <div>Claimed</div>
+      </div>
+      <div>
+        {projectHistory.map((project, index) => (
+          <ProjectRow key={index} project={project} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-//   if (!project) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h2>Project Details</h2>
-//       <p>Funding Goal: {project.fundingGoal}</p>
-//       <p>Deadline: {new Date(project.deadline).toLocaleDateString()}</p>
-//       <p>Total Funds Raised: {project.totalFunded}</p>
-//     </div>
-//   );
-// };
-
-// export default ProjectDetails;
+export default ProjectDetails;
