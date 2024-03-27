@@ -6,7 +6,7 @@ const ProjectDetails = () => {
   const { projectHistory } = useAppContext();
 
   return (
-    <div className="container" style={{marginTop: 30}}>
+    <div className="container" style={{marginTop: 50}}>
       <div className="container">
         <div className="row mb-3">
           <div className="col">Funding Goal</div>

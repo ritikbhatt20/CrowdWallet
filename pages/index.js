@@ -33,6 +33,7 @@ export default function Home() {
             <Header />
               <div className={style.container}>
                 <ProjectForm />
+                <ContributionForm/>
                 <ProjectDetails/>
               </div>
             <Footer />

@@ -96,6 +96,32 @@ export const AppProvider = ({ children }) => {
     console.log(history, "PROJECT HISTORY");
     setProjectHistory(history);
   };
+
+  const contribute = async (amount) => {
+    try {
+      if (!projectData) {
+        console.log("There is no Project");
+        return;
+      }
+      const am = new anchor.BN(amount)
+      const txHash = await program.methods
+      .contribute(am)
+      .accounts({
+        contributor: wallet.publicKey,
+        project: projectAddress,
+        systemProgram: SystemProgram.programId,
+      })
+      .rpc();
+      await confirmTx(txHash, connection);
+
+      fetchProjectData();
+      toast.success("Contributed successfully!");
+    }
+    catch(err){
+      console.error("Error in Contributing to project:", err);
+      toast.error("Failed to Contribute");
+    }
+  }
   
 
   return (
@@ -105,6 +131,7 @@ export const AppProvider = ({ children }) => {
         projectData,
         initializeProject,
         projectHistory,
+        contribute,
       }}
     >
       {children}
