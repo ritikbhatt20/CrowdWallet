@@ -35,6 +35,7 @@ export default function Home() {
                 <ProjectForm />
                 <ContributionForm/>
                 <ProjectDetails/>
+                <ClaimFundsButton/>
               </div>
             <Footer />
           </AppProvider>

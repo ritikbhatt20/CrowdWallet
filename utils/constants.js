@@ -3,5 +3,5 @@ import { PublicKey } from "@solana/web3.js";
 export const PROJECT_SEED = "project";
 
 export const PROGRAM_ID = new PublicKey(
-    "BqpG6B1GhmiDogP1Ee1wacN2heTFLyCcdrPZXT4ZKBNa"    
+    "4sArSZJLqMY7m3uWbHgnPJ5z7xt2J9v7VWF11BVAEnRC"    
 );  

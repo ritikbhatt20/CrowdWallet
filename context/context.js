@@ -1,22 +1,19 @@
 import { createContext, useContext, useMemo, useEffect, useState } from "react";
 import { SystemProgram } from "@solana/web3.js";
-import {
-  useAnchorWallet,
-  useConnection,
-} from "@solana/wallet-adapter-react";
+import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 
 import { getProgram, getProjectAddress } from "@/utils/program";
 import { confirmTx, mockWallet } from "@/utils/helper";
 import toast from "react-hot-toast";
 
-const anchor = require('@project-serum/anchor')
+const anchor = require("@project-serum/anchor");
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [projectData, setProjectData] = useState(null);
   const [projectAddress, setProjectAddress] = useState(null);
-  const [projectHistory, setProjectHistory] = useState([])
+  const [projectHistory, setProjectHistory] = useState([]);
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
 
@@ -41,7 +38,8 @@ export const AppProvider = ({ children }) => {
       }
       const data = await program.account.project.fetch(projectAddress);
       setProjectData(data);
-      console.log(data)
+      console.log(data);
+      getProjectHistory()
     } catch (error) {
       console.error("Error fetching project data:", error);
       toast.error("Failed to fetch project data");
@@ -54,8 +52,8 @@ export const AppProvider = ({ children }) => {
         const address = await getProjectAddress();
         setProjectAddress(address);
       }
-      const fundGoal = new anchor.BN(fundingGoal)
-      const deadl = new anchor.BN(deadline)
+      const fundGoal = new anchor.BN(fundingGoal);
+      const deadl = new anchor.BN(deadline);
       const txHash = await program.methods
         .initializeProject(fundGoal, deadl)
         .accounts({
@@ -64,27 +62,24 @@ export const AppProvider = ({ children }) => {
           systemProgram: SystemProgram.programId,
         })
         .rpc();
-        await confirmTx(txHash, connection);
+      await confirmTx(txHash, connection);
 
-        fetchProjectData();
-        toast.success("Project initialized successfully!");
-    } 
-    catch (err) {
+      fetchProjectData();
+      toast.success("Project initialized successfully!");
+    } catch (err) {
       console.error("Error initializing project:", err);
       toast.error("Failed to initialize project");
     }
   };
 
   const getProjectHistory = async () => {
-  
     const history = [];
-  
     for (let i = 1; i <= 1; i++) {
       const projectAddress = await getProjectAddress(); // Assuming getProjectAddress returns the address for a given project ID
-      if (!projectAddress) continue;
-  
+      if (projectData) break;
+
       const project = await program.account.project.fetch(projectAddress);
-  
+
       history.push({
         fundingGoal: project.fundingGoal.words[0],
         deadline: project.deadline.words[0],
@@ -92,7 +87,7 @@ export const AppProvider = ({ children }) => {
         claimedFund: project.claimedFund,
       });
     }
-  
+
     console.log(history, "PROJECT HISTORY");
     setProjectHistory(history);
   };
@@ -103,26 +98,44 @@ export const AppProvider = ({ children }) => {
         console.log("There is no Project");
         return;
       }
-      const am = new anchor.BN(amount)
+      const am = new anchor.BN(amount);
       const txHash = await program.methods
-      .contribute(am)
-      .accounts({
-        contributor: wallet.publicKey,
-        project: projectAddress,
-        systemProgram: SystemProgram.programId,
-      })
-      .rpc();
+        .contribute(am)
+        .accounts({
+          contributor: wallet.publicKey,
+          project: projectAddress,
+          systemProgram: SystemProgram.programId,
+        })
+        .rpc();
       await confirmTx(txHash, connection);
 
       fetchProjectData();
       toast.success("Contributed successfully!");
-    }
-    catch(err){
+    } catch (err) {
       console.error("Error in Contributing to project:", err);
       toast.error("Failed to Contribute");
     }
-  }
-  
+  };
+
+  const claimFunds = async () => {
+    try {
+      const txHash = await program.methods
+        .claimFunds()
+        .accounts({
+          project: projectAddress,
+          owner: wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .rpc();
+      await confirmTx(txHash, connection);
+
+      fetchProjectData();
+      toast.success("Claimed the Funds!");
+    } catch (err) {
+      console.log(err.message);
+      toast.error(err.message);
+    }
+  };
 
   return (
     <AppContext.Provider
@@ -132,6 +145,7 @@ export const AppProvider = ({ children }) => {
         initializeProject,
         projectHistory,
         contribute,
+        claimFunds,
       }}
     >
       {children}
@@ -142,4 +156,3 @@ export const AppProvider = ({ children }) => {
 export const useAppContext = () => {
   return useContext(AppContext);
 };
-
